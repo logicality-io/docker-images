@@ -1,0 +1,5 @@
+FROM ghcr.io/logicality-io/docker-images/build-dotnet:latest
+
+RUN apk update \
+    && apk add nodejs \
+    && apk add npm
