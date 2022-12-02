@@ -3,28 +3,28 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine
 # Workaround for https://github.com/grpc/grpc/issues/18428
 # Also see https://github.com/sgerrand/alpine-pkg-glibc
 # https://stackoverflow.com/a/61268529
-ENV GLIBC_VER=2.32-r0
+ENV GLIBC_VER=2.35-r0
 RUN apk update && apk --no-cache add ca-certificates wget \
     && wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
     && wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-${GLIBC_VER}.apk \
-    && wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-bin-${GLIBC_VER}.apk \
-    && apk add --no-cache \
-        glibc-${GLIBC_VER}.apk \
-        glibc-bin-${GLIBC_VER}.apk \
-    && rm glibc-${GLIBC_VER}.apk \
+    && wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-bin-${GLIBC_VER}.apk
+
+RUN apk add --force-overwrite --no-cache glibc-${GLIBC_VER}.apk glibc-bin-${GLIBC_VER}.apk
+
+RUN rm glibc-${GLIBC_VER}.apk \
     && rm glibc-bin-${GLIBC_VER}.apk \
     && rm -rf /var/cache/apk/*
 
 # Install DotNet Core 6.0
 RUN dotnet_sdk_version=6.0.403 \
-    &&wget -O dotnet.tar.gz https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$dotnet_sdk_version/dotnet-sdk-$dotnet_sdk_version-linux-musl-x64.tar.gz \
+    && wget -O dotnet.tar.gz https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$dotnet_sdk_version/dotnet-sdk-$dotnet_sdk_version-linux-musl-x64.tar.gz \
     && mkdir -p /usr/share/dotnet \
     && tar -C /usr/share/dotnet -xzf dotnet.tar.gz \
     && rm dotnet.tar.gz
 
 # Install DotNet Core 3.1
 RUN dotnet_sdk_version=3.1.415 \
-    &&wget -O dotnet.tar.gz https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$dotnet_sdk_version/dotnet-sdk-$dotnet_sdk_version-linux-musl-x64.tar.gz \
+    && wget -O dotnet.tar.gz https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$dotnet_sdk_version/dotnet-sdk-$dotnet_sdk_version-linux-musl-x64.tar.gz \
     && mkdir -p /usr/share/dotnet \
     && tar -C /usr/share/dotnet -xzf dotnet.tar.gz \
     && rm dotnet.tar.gz
@@ -37,4 +37,3 @@ RUN apk update \
     && apk add p7zip
 
 ENV PATH "$PATH:/root/.dotnet/tools"
-RUN dotnet tool install Amazon.Lambda.Tools -g
