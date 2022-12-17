@@ -6,5 +6,5 @@ All images are rebuilt on a weekly schedule to include the latest version of the
 
 | Image | Tools | Description |
 |---|---|---|
-| dotnet | .NET 7.0, .NET 6.0, .NETCore 3.1, git, docker-cli, zip | Used to build .NET libraries and applications.|
+| dotnet | .NET 7.0, .NET 6.0, git, docker-cli, zip | Used to build .NET libraries and applications.|
 | dotnet-node | Based on `dotnet:latest`, nodejs, npm | Used to build .NET based projects with .NET backends and NodeJS based frontends. |

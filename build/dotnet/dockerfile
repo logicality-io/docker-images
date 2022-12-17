@@ -22,14 +22,7 @@ RUN dotnet_sdk_version=6.0.403 \
     && tar -C /usr/share/dotnet -xzf dotnet.tar.gz \
     && rm dotnet.tar.gz
 
-# Install DotNet Core 3.1
-RUN dotnet_sdk_version=3.1.415 \
-    && wget -O dotnet.tar.gz https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$dotnet_sdk_version/dotnet-sdk-$dotnet_sdk_version-linux-musl-x64.tar.gz \
-    && mkdir -p /usr/share/dotnet \
-    && tar -C /usr/share/dotnet -xzf dotnet.tar.gz \
-    && rm dotnet.tar.gz
-
-# Install tool
+# Install tools
 RUN apk update \
     && apk add git \
     && apk add docker-cli \
