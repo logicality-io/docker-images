@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine
+FROM mcr.microsoft.com/dotnet/sdk:8.0-preview-alpine
 
 # Workaround for https://github.com/grpc/grpc/issues/18428
 # Also see https://github.com/sgerrand/alpine-pkg-glibc
@@ -17,6 +17,13 @@ RUN rm glibc-${GLIBC_VER}.apk \
 
 # Install DotNet Core 6.0
 RUN dotnet_sdk_version=6.0.403 \
+    && wget -O dotnet.tar.gz https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$dotnet_sdk_version/dotnet-sdk-$dotnet_sdk_version-linux-musl-x64.tar.gz \
+    && mkdir -p /usr/share/dotnet \
+    && tar -C /usr/share/dotnet -xzf dotnet.tar.gz \
+    && rm dotnet.tar.gz
+
+# Install DotNet Core 7.0
+RUN dotnet_sdk_version=7.0.201 \
     && wget -O dotnet.tar.gz https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$dotnet_sdk_version/dotnet-sdk-$dotnet_sdk_version-linux-musl-x64.tar.gz \
     && mkdir -p /usr/share/dotnet \
     && tar -C /usr/share/dotnet -xzf dotnet.tar.gz \
